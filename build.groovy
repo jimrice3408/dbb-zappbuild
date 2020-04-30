@@ -9,7 +9,7 @@ import groovy.transform.*
 import groovy.time.*
 import groovy.xml.*
 
-
+println("\n** Build starting here at $props.startTime")
 // define script properties
 @Field BuildProperties props = BuildProperties.getInstance()
 @Field def gitUtils= loadScript(new File("utilities/GitUtilities.groovy"))
@@ -52,7 +52,7 @@ if (processCounter == 0)
 	
 finalizeBuildProcess(start:startTime, count:processCounter)
 
-// if error occurred signal process error 
+// if error occurred signal process error
 if (props.error)
 	System.exit(1)
 
@@ -286,7 +286,7 @@ def populateBuildProperties(String[] args) {
 	if (opts.pf) props.pf = opts.pf
 	
 	// set debug flag
-	if(opts.d) props.debug = 'true' 
+	if(opts.d) props.debug = 'true'
 	
 	// set DBB configuration properties
 	if (opts.url) props.'dbb.RepositoryClient.url' = opts.url
@@ -305,7 +305,7 @@ def populateBuildProperties(String[] args) {
 	// set calculated properties
 	if (!props.userBuild) {
 		def gitDir = buildUtils.getAbsolutePath(props.application)
-		if ( gitUtils.isGitDetachedHEAD(gitDir) ) 
+		if ( gitUtils.isGitDetachedHEAD(gitDir) )
 			props.applicationCurrentBranch = gitUtils.getCurrentGitDetachedBranch(gitDir)
 		else
 			props.applicationCurrentBranch = gitUtils.getCurrentGitBranch(gitDir)
@@ -345,7 +345,7 @@ def createDatasets(String[] datasets, String options) {
 *   - full build : Contains all programs in application and external directories. Use script option --fullBuild
 *   - impact build : Contains impacted programs from calculated changed files. Use script option --impactBuild
 *   - build file : Contains one program. Provide a build file argument.
-*   - build text file: Contains a list of programs from a text file. Provide a *.txt build file argument. 
+*   - build text file: Contains a list of programs from a text file. Provide a *.txt build file argument.
 */
 def createBuildList() {
 	
@@ -445,7 +445,7 @@ def finalizeBuildProcess(Map args) {
 	if (repositoryClient) {
 		if (props.verbose)
 			println "** Updating build result BuildGroup:${props.applicationBuildGroup} BuildLabel:${props.applicationBuildLabel}"
-		def buildResult = repositoryClient.getBuildResult(props.applicationBuildGroup, props.applicationBuildLabel) 
+		def buildResult = repositoryClient.getBuildResult(props.applicationBuildGroup, props.applicationBuildLabel)
 		buildResult.setBuildReport(new FileInputStream(htmlOutputFile))
 		buildResult.setBuildReportData(new FileInputStream(jsonOutputFile))
 		buildResult.setProperty("filesProcessed", String.valueOf(args.count))
